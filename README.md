@@ -3,7 +3,7 @@ A C++ implementation of GSA(Genetic simulated annealing) global optimization alg
 Usage:
 1. Set GSA optimizer parameters:N,tmax,To,pmo,alpha,beta,K,Nitermax (see paper for more details)
 2. Run optimize method. Parameters: double function(double*,int), number of threads, dimension of  argument vector, minimal values, maximal values, output array.
-
+For random number class uses omprng: http://homepage.divms.uiowa.edu/~mbognar/omprng/
 See example(GSA.cpp) for more details.
 
 Reference:
