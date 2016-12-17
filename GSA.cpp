@@ -76,10 +76,6 @@ int GSA::psearch(int N,double x){
     }
 }
 
-//TODO: переложить параметры в параметры класса +
-//Распараллеливание
-//Критерий завершения цикла переписать
-//Проверить на традиционных функциях
 void GSA::optimize(double f(double*,int),int Nthreads,int dim,double *min, double *max,double *out){
     if(!paramsset){
         cout <<"GSA parameters not set. Optimization failed" << endl;
@@ -181,95 +177,3 @@ void GSA::optimize(double f(double*,int),int Nthreads,int dim,double *min, doubl
     delete[] parents;
     delete[] fvalues;
 }
-
-/*
-void GSA::optimizeSA(double f(double*,int), double *init, int dim, int numch, int bins, double dt, double T, double *params, double *vector, double *out, double &minf){
-    //define params
-    int N = 1;
-    int Ns = params[0];
-    double To = params[1];
-    int Nt = params[2];
-    double alpha = params[3];
-    double c = params[4];
-    int Ne = params[5];
-    omprng MyRng;
-    //init population
-    double ** population = new double*[1];
-    population[0] = new double[dim];
-    for(int i = 0; i < dim; ++i)
-        population[0][i] = init[i];
-    //function values
-    double* fs = new double[1];
-    double* fsch = new double[1];
-    fit.GSAiteration(population,N,numch,bins,dt,T,fs,1,&MyRng);
-    cout << "Init : " << endl;
-    for(int i = 0; i < dim; ++i)
-        cout << population[0][i] << endl;
-    cout << fs[0] << " ";
-    cout << endl;
-    double** children = new double*[1];
-    children[0] = new double[dim];
-    //sobsna, cikl
-    int Ncur = 0;
-    double ff = fs[0];
-    while(Ncur < Ne){
-        int Nacc = 0;
-        for(int i = 1; i <= Ns; ++i){
-            for(int j = 1; j <= Nt; ++j){
-                //generate new vector
-                for(int z = 0; z < dim; ++z){
-                    if(z == 2){
-                        double k = children[0][0];
-                        double a = children[0][1];
-                        children[0][z] = MyRng.runif((6.6+0.5*a/k)*a,8.65*a);
-                        continue;
-                    }
-                    if(z == 9){
-                        double k = children[0][0];
-                        children[0][z] = MyRng.runif(0,2*sqrt(k));
-                        continue;
-                    }
-                    double r = MyRng.runif(-1,1);
-                    children[0][z] = population[0][z] + r*vector[z];
-                    while(children[0][z] <= 0){
-                        r = MyRng.runif(-1,1);
-                        children[0][z] = population[0][z] + r*vector[z];
-                    }
-                }
-                //Boltzmann
-                fit.GSAiteration(children,N,numch,bins,dt,T,fsch,1,&MyRng);
-                double r = MyRng.runif();
-                if(exp((fs[0]-fsch[0])/To) > r){
-                    ++Nacc;
-                    for(int z = 0; z < dim; ++z)
-                        population[0][z] = children[0][z];
-                    fs[0] = fsch[0];
-                    }
-                for(int z = 0; z < dim; ++z)
-                    cout << population[0][z] << endl;
-                cout << "function:" << fs[0] << endl;
-                cout << "--------------------------" << endl;
-            }
-            To*=alpha;
-        }
-        //change vector
-        double a = 2*(1-2*c + c*c)/c, b = 4 - 3/c - c, d = 1/c;
-        double n = double(Nacc)/(Ns*Nt);
-        double g = a*n*n + b*n + d;
-        for(int z = 0; z < dim; ++z)
-            vector[z] *= g;
-        if(abs(ff - fs[0]) < 1e-3)
-            ++Ncur;
-        ff = fs[0];
-    }
-    minf = ff;
-    for(int i = 0; i < dim; ++i)
-        out[i] = population[0][i];
-    delete[] population[0];
-    delete[] children[0];
-    delete[] population;
-    delete[] children;
-    delete[] fs;
-    delete[] fsch;
-}
-*/
